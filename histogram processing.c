@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
   /* Read image */
 
   ima = bmpread(fin_name, &n_row, &n_col);
-  t=(unsigned char *)calloc(n_row*n_col,sizeof(unsigned char));
+  t=(unsigned char *)calloc(n_row*n_col,sizeof(unsigned char));//分配一个长度width高度为height内存空间给指向指针
   k=(unsigned char *)calloc(n_row*n_col,sizeof(unsigned char));
 
  
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     for (j=0; j<n_col; j++) {
 
 	  n[ima[i*n_col+j]]++; 
-	  
+	  //将灰度值相同的进行统计，并从小到大存在数组n[256]中
 
 		/* *********  Gamma  ***************
 
@@ -66,13 +66,13 @@ int main(int argc, char *argv[])
   }
 
   for(i=0;i<256;i++){
-	  p[i] = (double)n[i]/(n_row * n_col); 
+	  p[i] = (double)n[i]/(n_row * n_col);//将灰度值为i的个数除以图像的总像素点，也就是灰度值为i的概率密度p(i) 
 	}
 
 
   for(i=0;i<256;i++){
 	  for(j=0;j<=i;j++){
-		  c[i] += p[j]; 
+		  c[i] += p[j]; //生成灰度值为i的概率分布c(i)
 	  }
   }
 
@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
 			  min = ima[i*n_col+j];
 		  }
 	  }
-  }
+  }//算出灰度值范围，最大值max和最小值min
   
   for(i = 0;i < n_row;i++){
 	  for(j = 0;j < n_col;j++){
 		  t[i*n_col+j]=(int)(c[ima[i*n_col+j]]*max+0.5);
-		 
+		  //将图像中像素点的灰度值对应的概率分布函数乘以灰度值范围再四舍五入，把算出来的新的灰度值赋给t 
 	  }
   }
 
